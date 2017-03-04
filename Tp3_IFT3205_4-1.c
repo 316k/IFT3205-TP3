@@ -75,9 +75,7 @@ void iteration(float** img_orig, float** img_r,
     for(i=offsety; i < offsety + dft_size_y; i++)
         for(j=offsetx; j < offsetx + dft_size_x; j++) {
             if(img_orig[i][j] == 255) {
-                float coef = 1; //fabs(sin((j - offsetx) / (float)(dft_size_x - 1) * PI));
-                
-                img_r[i][j] = (1 - coef) * img_r[i][j] + coef * filtered_r[i - offsety][j - offsetx];
+                img_r[i][j] = filtered_r[i - offsety][j - offsetx];
             }
         }
 
@@ -113,47 +111,47 @@ void iteration(float** img_orig, float** img_r,
 int main(int argc,char **argv) {
     int i, j, k;
     int length, width;
+    int extra_height = 40;
 
     //Lecture Image 
     float** orig = LoadImagePgm(NAME_IMG_IN,&length,&width);
-    float** img = fmatrix_allocate_2d(length + 30, width);
-    float** img_r = fmatrix_allocate_2d(length + 30, width);
+    float** img = fmatrix_allocate_2d(length + extra_height, width);
+    float** img_r = fmatrix_allocate_2d(length + extra_height, width);
 
     for(i=0; i<length; i++)
         for(j=0; j<width; j++) {
-            img_r[i + 30][j] = orig[i][j];
+            img_r[i + extra_height][j] = orig[i][j];
         }
 
     for(j=0; j<width; j++) {
         float moyenne = 0;
 
-        for(i=0; i<30; i++) {
+        for(i=0; i<extra_height; i++) {
             moyenne += orig[i][j];
         }
 
-        moyenne /= 30;
+        moyenne /= extra_height;
 
-        for(i=0; i<30; i++) {
+        for(i=0; i<extra_height; i++) {
             img_r[i][j] = moyenne;
             img[i][j] = 255;
         }
     }
     
     //Interpolation
-    // 5 itérations
     
     for(i=0; i<width; i++) {
         float focken = 0.4;
         
         for(j=0; j<10; j++) {
-            iteration(img, img_r, length + 30, width,
+            iteration(img, img_r, length + extra_height, width,
                       i * 4, 0, fmin(8, width - i), 90, focken);
             
             focken /= 2;
         }
     }
     
-    SaveImagePgm(NAME_IMG_OUT, img_r, length + 30, width);
+    SaveImagePgm(NAME_IMG_OUT, img_r, length + extra_height, width);
     
     return 0; 	 
 }

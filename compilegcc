@@ -1,7 +1,7 @@
 echo 
 echo compilation du programme ${a=${1}.c}
 
-gcc -c FonctionDemo2.c
-gcc -o $1 $a FonctionDemo2.o -lm
 killall display
-./$1
+gcc -c FonctionDemo3.c
+gcc -o $1 $a FonctionDemo3.o -lm && ./$1
+
