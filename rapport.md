@@ -17,10 +17,7 @@ Puisque l'interpolation spectrale est équivalente à convoluer avec un noyau d'
 
 ## 2.3
 
-Une façon serait de calculer la TF de l'image, de la placer au centre d'une image plus grande et d'extrapoler les bords pour tenter de retrouver des hautes fréquences plausibles pour cette image.
-
-Il serait peut-être utile d'appliquer un dégradé sur les fréquences extrapolées, afin d'éviter de donner trop d'importance aux fréquences les plus éloignées des fréquences connues.
-
+Une façon simple serait d'appliquer la même technique que pour l'agrandissement spatial : on peut agrandir le support de l'image, y centrer l'image originale en zero-paddant autour, puis prendre la TF de cette nouvelle image.
 
 ## 3.3
 
